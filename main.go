@@ -1,7 +1,7 @@
 package main
 
 // #include <Python.h>
-// int PyArg_ParseTuple_s(PyObject* args, char** a)
+// int PyArg_ParseTuple_s(PyObject* args, char** a);
 import "C"
 import (
 	"bytes"
