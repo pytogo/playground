@@ -47,6 +47,7 @@ func runCmd(command string, args ...string) {
 
 	if err != nil {
 		errMsg := stderr.String()
+
 		if len(errMsg) > 0 {
 			log.Fatal(errMsg)
 		}
@@ -54,10 +55,8 @@ func runCmd(command string, args ...string) {
 
 	info := stdout.String()
 	if len(info) > 0 {
-		log.Fatalf("%s\n", info)
+		fmt.Printf("%s\n", info)
 	}
-
-	log.Printf("Finished '%s'\n", cmd)
 }
 
 func main() {}
