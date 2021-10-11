@@ -1,7 +1,7 @@
 package main
 
 // #include <Python.h>
-// int PyArg_ParseTuple_s(PyObject* args, char** a);
+// int PyArg_ParseTuple_ss(PyObject* args, char** a, char** b);
 import "C"
 import (
 	"bytes"
@@ -16,23 +16,29 @@ import (
 func command(self *C.PyObject, args *C.PyObject) *C.PyObject {
 
 	var cmd *C.char
+	var cwd *C.char
 
-	if C.PyArg_ParseTuple_s(args, &cmd) == 0 {
+	if C.PyArg_ParseTuple_ss(args, &cmd, &cwd) == 0 {
 		fmt.Println("Could not parse args")
 		os.Exit(1)
 	}
 
 	var cmdStr string = C.GoString(cmd)
+	var cwdStr string = C.GoString(cwd)
 
 	cmdParts := strings.Split(cmdStr, " ")
 
-	runCmd(cmdParts[0], cmdParts[1:]...)
+	if len(cmdParts) == 0 {
+		log.Fatal("No valid command provided")
+	}
+
+	runCmd(cwdStr, cmdParts[0], cmdParts[1:]...)
 
 	C.Py_IncRef(C.Py_None)
 	return C.Py_None
 }
 
-func runCmd(command string, args ...string) {
+func runCmd(cwd, command string, args ...string) {
 	cmd := exec.Command(command, args...)
 
 	var (
@@ -42,6 +48,7 @@ func runCmd(command string, args ...string) {
 
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
+	cmd.Dir = cwd
 
 	err := cmd.Run()
 

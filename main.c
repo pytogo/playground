@@ -15,8 +15,8 @@ Reminder from docs about memory management when parsing arguments:
 > won’t have to release any memory yourself. The only
 > exceptions are es, es#, et and et#.
 */
-int PyArg_ParseTuple_s(PyObject* args, char** a) {
-    return PyArg_ParseTuple(args, "s", a);
+int PyArg_ParseTuple_ss(PyObject* args, char** a, char** b) {
+    return PyArg_ParseTuple(args, "ss", a, b);
 }
 
 static struct PyMethodDef methods[] = {

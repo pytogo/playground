@@ -1,5 +1,5 @@
 import _playground
 
 
-def command(cmd: str):
-    _playground.command(cmd)
+def command(cmd: str, cwd="."):
+    _playground.command(cmd, cwd)
